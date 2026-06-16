@@ -409,7 +409,7 @@ textarea::placeholder{color:#b8bec9}
           <div class="diff-tag tag-free">Free</div>
           <div class="diff-icon">📂</div>
           <h3>File Upload — Both Sides</h3>
-          <p>Upload your resume AND the job description as PDFs or text files. No copying, no pasting. Works with LinkedIn job URLs too.</p>
+          <p>Upload your resume AND the job description as Word documents or text files. No copying, no pasting. Works with LinkedIn job URLs too.</p>
         </div>
         <div class="diff-card featured-diff">
           <div class="diff-tag tag-unique">Unique to Us</div>
@@ -547,11 +547,11 @@ textarea::placeholder{color:#b8bec9}
           <div class="drop-zone" id="r-dropzone" onclick="document.getElementById('r-file-input').click()" ondragover="dz_over(event,'r-dropzone')" ondragleave="dz_leave('r-dropzone')" ondrop="dz_drop(event,'resume')">
             <div class="dz-icon">📄</div>
             <div class="dz-text"><strong>Click to browse</strong> or drag & drop</div>
-            <div class="dz-sub">PDF or .txt · Max 10MB</div>
+            <div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>
           </div>
-          <input type="file" id="r-file-input" accept=".pdf,.txt,.text" style="display:none" onchange="file_pick(event,'resume')">
+          <input type="file" id="r-file-input" accept=".docx,.txt,.text" style="display:none" onchange="file_pick(event,'resume')">
           <div id="r-file-pill" class="file-pill" style="display:none">
-            📎 <span id="r-file-name">resume.pdf</span>
+            📎 <span id="r-file-name">resume.docx</span>
             <button class="file-pill-remove" onclick="clearFile('resume')">✕ Remove</button>
           </div>
         </div>
@@ -575,11 +575,11 @@ textarea::placeholder{color:#b8bec9}
           <div class="drop-zone" id="j-dropzone" onclick="document.getElementById('j-file-input').click()" ondragover="dz_over(event,'j-dropzone')" ondragleave="dz_leave('j-dropzone')" ondrop="dz_drop(event,'jd')">
             <div class="dz-icon">📋</div>
             <div class="dz-text"><strong>Click to browse</strong> or drag & drop</div>
-            <div class="dz-sub">PDF or .txt · Max 10MB</div>
+            <div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>
           </div>
-          <input type="file" id="j-file-input" accept=".pdf,.txt,.text" style="display:none" onchange="file_pick(event,'jd')">
+          <input type="file" id="j-file-input" accept=".docx,.txt,.text" style="display:none" onchange="file_pick(event,'jd')">
           <div id="j-file-pill" class="file-pill" style="display:none">
-            📎 <span id="j-file-name">job-description.pdf</span>
+            📎 <span id="j-file-name">job-description.docx</span>
             <button class="file-pill-remove" onclick="clearFile('jd')">✕ Remove</button>
           </div>
         </div>
@@ -824,7 +824,7 @@ function dz_drop(e, side) {
   document.getElementById(prefix+'-dropzone').classList.remove('drag-over');
   const file = e.dataTransfer.files[0];
   if (file) processFile(file, side);
-  else showError('Drop a PDF or .txt file.');
+  else showError('Drop a Word (.docx) or .txt file.');
 }
 function file_pick(e, side) { if (e.target.files[0]) processFile(e.target.files[0], side); }
 
@@ -867,7 +867,7 @@ async function processFile(file, side) {
     pill.style.display = 'flex';
     showToast('✓ ' + file.name + ' loaded');
   } catch(err) {
-    dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">PDF or .txt · Max 10MB</div>`;
+    dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>`;
     showError(err.message);
   }
 }
@@ -879,7 +879,7 @@ function clearFile(side) {
   document.getElementById(prefix+'-file-pill').style.display = 'none';
   const dz = document.getElementById(prefix+'-dropzone');
   dz.style.display = 'flex';
-  dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">PDF or .txt · Max 10MB</div>`;
+  dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>`;
 }
 
 function updateCount(taId, countId) {
