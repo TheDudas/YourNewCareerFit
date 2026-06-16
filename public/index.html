@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YourNewCareerFit — AI Career Coach That Tells You the Truth</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -836,21 +837,10 @@ async function processFile(file, side) {
 
   try {
     let text = '';
-    if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+    if (file.name.endsWith('.docx') || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       const buf = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({data: buf}).promise;
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent({ normalizeWhitespace: true });
-        const pageText = content.items
-          .filter(s => s.str)
-          .map(s => s.str + (s.hasEOL ? '\n' : ''))
-          .join('');
-        text += pageText + '\n';
-      }
-      if (!text.trim() || text.trim().length < 50) {
-        throw new Error('This PDF appears to be image-based (scanned) and contains no selectable text. Please paste your resume text directly, or use a PDF exported from Word/Google Docs.');
-      }
+      const result = await mammoth.extractRawText({ arrayBuffer: buf });
+      text = result.value;
     } else {
       text = await file.text();
     }
