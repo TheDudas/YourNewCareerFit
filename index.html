@@ -970,14 +970,19 @@ Return ONLY valid JSON (no markdown fences, no preamble):
     {"title":"<action phrase>","detail":"<advice>"}
   ]
 }`
-    }], 1500);
+    }], 2500);
 
     clearInterval(timer);
     document.getElementById('loadingState').classList.remove('visible');
     document.getElementById('analyzeBtn').disabled = false;
 
     const raw = data.content.map(b=>b.text||'').join('');
-    const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    let result;
+    try {
+      result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    } catch(e) {
+      throw new Error('Claude returned an unexpected response. Try shortening your resume or job description, or paste the text directly instead of uploading.');
+    }
     S.result = result;
     S.used++;
     updateUsage();
