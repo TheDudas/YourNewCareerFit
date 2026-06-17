@@ -715,7 +715,7 @@ textarea::placeholder{color:#b8bec9}
         <div class="res-hdr"><div class="dot dot-p"></div>Likely Interview Questions — Based On Your Gaps</div>
         <div class="iq-body" id="iq-body"></div>
       </div>
-      <div class="cta-bar"><div><h3>Practice makes perfect.</h3><p>Work through these answers with a career coach before the real interview.</p></div><button class="btn-cta">Book Interview Coaching →</button></div>
+      <div class="cta-bar"><div><h3>Are you a career coach?</h3><p>Use this tool with all your clients — unlimited analyses and interview prep for every candidate.</p></div><button class="btn-cta" onclick="startCheckout('coach')">Get the Coaching Plan →</button></div>
     </div>
   </div>
 
@@ -732,7 +732,7 @@ textarea::placeholder{color:#b8bec9}
         <div class="res-hdr"><div class="dot dot-b"></div>Salary Intelligence — This Role & Market</div>
         <div class="salary-body" id="salary-body"></div>
       </div>
-      <div class="cta-bar"><div><h3>Negotiate from data, not hope.</h3><p>Know your number before the offer conversation starts.</p></div><button class="btn-cta">Get Salary Coaching →</button></div>
+      <div class="cta-bar"><div><h3>Want more salary data?</h3><p>Cross-reference with live market data for the most accurate number to bring to your negotiation.</p></div><button class="btn-cta" onclick="window.open('https://www.salary.com','_blank')">Check Salary.com →</button></div>
     </div>
   </div>
 
@@ -1147,16 +1147,18 @@ async function genSalary(silent) {
   document.getElementById('salary-lock').textContent = '';
 
   try {
-    const data = await callClaude([{role:'user',content:`You are a compensation expert. Estimate the realistic salary range for this role based on the job description and candidate level.
+    const data = await callClaude([{role:'user',content:`You are a senior compensation expert with deep knowledge of US executive and professional salary benchmarks. Estimate the realistic base salary range for this role.
+
+IMPORTANT: Calibrate carefully to seniority level. Director roles typically range $100K-$150K. VP roles typically range $130K-$200K. SVP/EVP roles typically range $175K-$275K. C-suite roles typically range $200K+. Do not underestimate senior roles.
 
 JOB DESCRIPTION (first 800 chars): ${S.jdText.substring(0,800)}
 CANDIDATE MATCH: ${S.result.score}% fit, verdict: ${S.result.verdict}
 
 Return ONLY valid JSON:
 {
-  "low": <integer, 10th percentile annual salary in USD, no $ sign>,
-  "mid": <integer, median annual salary in USD>,
-  "high": <integer, 90th percentile annual salary in USD>,
+  "low": <integer, 25th percentile annual base salary in USD, no $ sign>,
+  "mid": <integer, median annual base salary in USD>,
+  "high": <integer, 75th percentile annual base salary in USD>,
   "candidate_position": <integer 0-100, where this candidate likely falls in the range based on their fit score — 0=low end, 100=top>,
   "context": "<2 sentences: key factors driving this range and what would push this candidate toward the higher end>",
   "negotiation_tip": "<1 specific actionable negotiation tip for this candidate given their profile>",
