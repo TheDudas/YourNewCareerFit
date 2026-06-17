@@ -1061,16 +1061,19 @@ async function genCL() {
   document.getElementById('cl-body').innerHTML = '<div class="cl-loading"><div class="mini-spin"></div> Writing your cover letter…</div>';
 
   try {
+    const resumeSnippet = S.resumeText.substring(0, 3000);
+    const jdSnippet = S.jdText.substring(0, 2000);
     const data = await callClaude([{role:'user',content:`Write a personalized cover letter. 4 paragraphs, 260-320 words, plain text only — no headers, no salutation placeholder.
 
-RESUME: ${S.resumeText}
-JOB DESCRIPTION: ${S.jdText}
+ROLE: ${role}
 MATCH SCORE: ${S.result.score}%
 STRENGTHS: ${(S.result.strengths||[]).map(s=>s.text).join('; ')}
 GAPS TO ADDRESS: ${(S.result.gaps||[]).map(g=>g.text).join('; ')}
+KEY JD REQUIREMENTS: ${jdSnippet}
+CANDIDATE BACKGROUND SUMMARY: ${resumeSnippet}
 
 Rules:
-- Open with something specific about the role or company — never "I am writing to express my interest"
+- Open with something specific about the role — never "I am writing to express my interest"
 - Paragraph 2: 2-3 accomplishments from the resume that map directly to requirements
 - Paragraph 3: Address the most significant gap briefly and honestly, pivot to compensating strength
 - Paragraph 4: Confident, specific call to action
