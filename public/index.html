@@ -1222,7 +1222,7 @@ async function startCheckout(plan) {
   closePaywall();
   try {
     const link = plan === 'pro' ? STRIPE_LINK_PRO : STRIPE_LINK_COACH;
-    window.location.href = link;
+    window.open(link, '_blank');
   } catch(err) { showError('Checkout error: '+err.message); }
 }
 
