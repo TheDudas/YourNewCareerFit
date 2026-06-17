@@ -1234,6 +1234,7 @@ async function startCheckout(plan) {
 
 function activatePlan(plan) {
   S.plan = plan; S.limit = 9999;
+  localStorage.setItem('ncf_plan', plan);
   updateUsage();
   document.getElementById('cover-lock').textContent = '';
   document.getElementById('interview-lock').textContent = '';
@@ -1276,6 +1277,10 @@ function showToast(msg) {
   t.textContent=msg; t.classList.add('visible');
   setTimeout(()=>t.classList.remove('visible'),3200);
 }
+
+// Restore saved plan from localStorage
+const savedPlan = localStorage.getItem('ncf_plan');
+if(savedPlan && savedPlan !== 'free') activatePlan(savedPlan);
 
 // Handle Stripe return
 const upgraded = new URLSearchParams(window.location.search).get('upgraded');
