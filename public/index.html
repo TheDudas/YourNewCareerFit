@@ -945,6 +945,12 @@ async function analyze() {
       role:'user',
       content:`You are a senior career strategist. Analyze this resume vs job description with complete honesty.
 
+CRITICAL RULES:
+- Base ALL analysis strictly and only on the exact text provided below. Do not infer, assume, or import any industry, skill, or requirement that is not explicitly stated in the job description text.
+- If the job description does not mention healthcare, do not reference healthcare. If it does not mention a specific tool or certification, do not list it as a gap.
+- Keywords matched and missing must come word-for-word from the actual job description text provided.
+- Strengths and gaps must be grounded in specific text from the resume and job description — quote or paraphrase actual content, never invent it.
+
 RESUME:
 ${resume}
 
@@ -953,26 +959,26 @@ ${jd}
 
 Return ONLY valid JSON (no markdown fences, no preamble):
 {
-  "score": <integer 0-100, overall candidate-to-role fit>,
-  "ats_score": <integer 0-100, how well the resume would pass ATS keyword scanning>,
+  "score": <integer 0-100, overall candidate-to-role fit based solely on the documents above>,
+  "ats_score": <integer 0-100, how well the resume would pass ATS keyword scanning for this specific JD>,
   "ats_desc": "<4 words max: e.g. 'Good ATS Readiness' or 'Needs Keyword Work'>",
   "verdict": "<5 words max, honest assessment>",
-  "summary": "<3 sentences: overall fit, biggest asset, key concern>",
+  "summary": "<3 sentences: overall fit, biggest asset, key concern — based only on these documents>",
   "strengths": [
-    {"icon":"✓","text":"<specific evidence-based strength>"},
+    {"icon":"✓","text":"<specific evidence-based strength citing actual resume content vs actual JD requirement>"},
     {"icon":"✓","text":"<strength>"},
     {"icon":"✓","text":"<strength>"},
     {"icon":"✓","text":"<strength>"}
   ],
   "gaps": [
-    {"icon":"✗","text":"<honest specific gap>"},
+    {"icon":"✗","text":"<honest specific gap — only list if the JD explicitly requires it and it is absent from the resume>"},
     {"icon":"✗","text":"<gap>"},
     {"icon":"✗","text":"<gap>"}
   ],
-  "keywords_matched": ["<keyword from JD in resume>","<keyword>","<keyword>","<keyword>","<keyword>","<keyword>"],
-  "keywords_missing": ["<important JD keyword NOT in resume>","<keyword>","<keyword>","<keyword>","<keyword>"],
+  "keywords_matched": ["<keyword that appears in both the JD and resume>","<keyword>","<keyword>","<keyword>","<keyword>","<keyword>"],
+  "keywords_missing": ["<keyword explicitly in the JD but absent from the resume>","<keyword>","<keyword>","<keyword>","<keyword>"],
   "coaching": [
-    {"title":"<action phrase>","detail":"<specific actionable advice for this candidate and role>"},
+    {"title":"<action phrase>","detail":"<specific actionable advice for this candidate and this exact role>"},
     {"title":"<action phrase>","detail":"<advice>"},
     {"title":"<action phrase>","detail":"<advice>"}
   ]
