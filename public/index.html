@@ -931,6 +931,15 @@ async function analyze() {
   S.resumeText = resume;
   S.jdText = jd;
 
+  S.result = null; S.coverLetter = ''; S.interviewQs = null; S.salaryData = null;
+  document.getElementById('cl-body').innerHTML = '';
+  document.getElementById('iq-body').innerHTML = '';
+  document.getElementById('iq-gate').style.display = 'block';
+  document.getElementById('iq-content').style.display = 'none';
+  document.getElementById('cl-gate').style.display = 'block';
+  document.getElementById('cl-content').style.display = 'none';
+  document.getElementById('sal-gate').style.display = 'block';
+  document.getElementById('sal-content').style.display = 'none';
   document.getElementById('results').style.display = 'none';
   document.getElementById('errorMsg').classList.remove('visible');
   document.getElementById('loadingState').classList.add('visible');
