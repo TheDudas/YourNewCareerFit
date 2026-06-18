@@ -611,6 +611,14 @@ textarea::placeholder{color:#b8bec9}
 
     <!-- RESULTS -->
     <div id="results">
+      <!-- EMAIL CAPTURE -->
+      <div id="email-capture-bar" style="display:none;background:var(--navy);color:#fff;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:14px;flex:1;min-width:180px">📬 <strong>Save your results</strong> — get your analysis recap by email</span>
+        <input id="capture-email" type="email" placeholder="your@email.com" style="padding:8px 12px;border-radius:6px;border:none;font-size:14px;width:200px;font-family:inherit">
+        <button onclick="submitEmailCapture()" style="background:var(--amber);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Send</button>
+        <button onclick="dismissEmailCapture()" style="background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-size:18px;line-height:1;padding:0 4px">×</button>
+      </div>
+
       <!-- SCORE HERO -->
       <div class="score-hero">
         <div>
@@ -1074,6 +1082,7 @@ function renderResults(r) {
   }).join('') + (!isPro ? `<div style="padding:8px 0 4px;text-align:center"><span class="upgrade-link" onclick="showPaywall('coaching')">Unlock all coaching steps with Pro →</span></div>` : '');
 
   document.getElementById('results').style.display = 'block';
+  showEmailCapture();
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -1247,6 +1256,29 @@ function goToTab(id) {
   if(id==='cover'&&S.result&&!S.coverLetter) genCL();
   if(id==='interview') handleInterviewTab();
   if(id==='salary'&&S.result&&!S.salaryData) { if(S.plan==='free'){showPaywall('salary');return;} genSalary(false); }
+}
+
+// ── EMAIL CAPTURE ─────────────────────────────────
+function showEmailCapture() {
+  if(localStorage.getItem('ncf_email_captured')) return;
+  document.getElementById('email-capture-bar').style.display = 'flex';
+}
+function dismissEmailCapture() {
+  document.getElementById('email-capture-bar').style.display = 'none';
+  localStorage.setItem('ncf_email_captured', '1');
+}
+async function submitEmailCapture() {
+  const email = document.getElementById('capture-email').value.trim();
+  if(!email || !email.includes('@')) { showToast('Please enter a valid email.'); return; }
+  try {
+    await fetch('https://formspree.io/f/xrevvvll', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email, plan: S.plan, score: S.result?.score || '' })
+    });
+  } catch(e) {}
+  dismissEmailCapture();
+  showToast('✓ Results sent to ' + email);
 }
 
 // ── PAYWALL ───────────────────────────────────────
