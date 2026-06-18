@@ -1027,6 +1027,7 @@ Return ONLY valid JSON (no markdown fences, no preamble):
     localStorage.setItem('ncf_resume', resume);
     localStorage.setItem('ncf_jd', jd);
     S.used++;
+    localStorage.setItem('ncf_used', S.used);
     updateUsage();
     renderResults(result);
 
@@ -1318,9 +1319,11 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('visible'),3200);
 }
 
-// Restore saved plan from localStorage
+// Restore saved plan and usage count from localStorage
 const savedPlan = localStorage.getItem('ncf_plan');
 if(savedPlan && savedPlan !== 'free') activatePlan(savedPlan);
+const savedUsed = parseInt(localStorage.getItem('ncf_used') || '0', 10);
+if(savedUsed > 0) { S.used = savedUsed; }
 
 // Restore last analysis result from localStorage
 const savedResult = localStorage.getItem('ncf_result');
