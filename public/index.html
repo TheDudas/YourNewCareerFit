@@ -762,7 +762,9 @@ textarea::placeholder{color:#b8bec9}
 <div class="toast" id="toast"></div>
 
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
 
 // ── CONFIG — replace before going live ───────────────
 const STRIPE_LINK_PRO   = 'https://buy.stripe.com/7sY8wP8US9Owa2YcDHcs800';
