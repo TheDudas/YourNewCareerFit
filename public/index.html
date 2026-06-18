@@ -1214,7 +1214,11 @@ document.getElementById('tab-btn-cover').addEventListener('click', ()=>{
 });
 document.getElementById('tab-btn-interview').addEventListener('click', ()=>{
   if(S.plan==='free'){showPaywall('interview');return;}
-  if(!S.result){return;}
+  if(!S.result){
+    document.getElementById('iq-gate').style.display='block';
+    document.getElementById('iq-content').style.display='none';
+    return;
+  }
   document.getElementById('iq-gate').style.display='none';
   document.getElementById('iq-content').style.display='block';
   if(!S.interviewQs){genInterview(false);}
