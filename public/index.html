@@ -1001,11 +1001,8 @@ Return ONLY valid JSON (no markdown fences, no preamble):
     updateUsage();
     renderResults(result);
 
-    // Trigger background generation of pro features if pro user
     if (S.plan !== 'free') {
       document.getElementById('pro-prompts').style.display = 'block';
-      genInterview(true);
-      genSalary(true);
     }
 
   } catch(err) {
