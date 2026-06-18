@@ -952,10 +952,10 @@ CRITICAL RULES:
 - Strengths and gaps must be grounded in specific text from the resume and job description — quote or paraphrase actual content, never invent it.
 
 RESUME:
-${resume}
+${resume.substring(0,4000)}
 
 JOB DESCRIPTION:
-${jd}
+${jd.substring(0,3000)}
 
 Return ONLY valid JSON (no markdown fences, no preamble):
 {
