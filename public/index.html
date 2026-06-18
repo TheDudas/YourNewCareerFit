@@ -802,8 +802,6 @@ function switchTab(id, el) {
   el.classList.add('active');
   document.getElementById('panel-'+id).classList.add('active');
 }
-function goToTab(id) { switchTab(id, document.getElementById('tab-btn-'+id)); }
-
 // ── INPUT MODES ───────────────────────────────────
 function setMode(side, mode) {
   const prefix = side === 'resume' ? 'r' : 'j';
@@ -1231,6 +1229,8 @@ document.getElementById('tab-btn-salary').addEventListener('click', ()=>{
 function goToTab(id) {
   switchTab(id, document.getElementById('tab-btn-'+id));
   if(id==='cover'&&S.result&&!S.coverLetter) genCL();
+  if(id==='interview') handleInterviewTab();
+  if(id==='salary'&&S.result&&!S.salaryData) { if(S.plan==='free'){showPaywall('salary');return;} genSalary(false); }
 }
 
 // ── PAYWALL ───────────────────────────────────────
