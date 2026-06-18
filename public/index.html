@@ -548,7 +548,7 @@ textarea::placeholder{color:#b8bec9}
           <div class="drop-zone" id="r-dropzone" onclick="document.getElementById('r-file-input').click()" ondragover="dz_over(event,'r-dropzone')" ondragleave="dz_leave('r-dropzone')" ondrop="dz_drop(event,'resume')">
             <div class="dz-icon">📄</div>
             <div class="dz-text"><strong>Click to browse</strong> or drag & drop</div>
-            <div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>
+            <div class="dz-sub">Word (.docx), PDF, or .txt · Max 10MB</div>
           </div>
           <input type="file" id="r-file-input" accept=".docx,.txt,.text" style="display:none" onchange="file_pick(event,'resume')">
           <div id="r-file-pill" class="file-pill" style="display:none">
@@ -576,7 +576,7 @@ textarea::placeholder{color:#b8bec9}
           <div class="drop-zone" id="j-dropzone" onclick="document.getElementById('j-file-input').click()" ondragover="dz_over(event,'j-dropzone')" ondragleave="dz_leave('j-dropzone')" ondrop="dz_drop(event,'jd')">
             <div class="dz-icon">📋</div>
             <div class="dz-text"><strong>Click to browse</strong> or drag & drop</div>
-            <div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>
+            <div class="dz-sub">Word (.docx), PDF, or .txt · Max 10MB</div>
           </div>
           <input type="file" id="j-file-input" accept=".docx,.txt,.text" style="display:none" onchange="file_pick(event,'jd')">
           <div id="j-file-pill" class="file-pill" style="display:none">
@@ -848,6 +848,18 @@ async function processFile(file, side) {
         .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&apos;/g, "'").replace(/&quot;/g, '"')
         .replace(/\n{3,}/g, '\n\n')
         .trim();
+    } else if (file.name.endsWith('.pdf') || file.type === 'application/pdf') {
+      if (typeof pdfjsLib === 'undefined') throw new Error('PDF reader not available. Please paste the text directly or use a Word (.docx) file.');
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      const pages = [];
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        pages.push(content.items.map(item => item.str).join(' '));
+      }
+      text = pages.join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+      if (!text || text.length < 50) throw new Error('PDF appears to be image-based (scanned). Please use a text-based PDF, paste the text directly, or upload a Word (.docx) file.');
     } else {
       text = await file.text();
     }
@@ -864,7 +876,7 @@ async function processFile(file, side) {
     pill.style.display = 'flex';
     showToast('✓ ' + file.name + ' loaded');
   } catch(err) {
-    dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>`;
+    dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">Word (.docx), PDF, or .txt · Max 10MB</div>`;
     showError(err.message);
   }
 }
@@ -876,7 +888,7 @@ function clearFile(side) {
   document.getElementById(prefix+'-file-pill').style.display = 'none';
   const dz = document.getElementById(prefix+'-dropzone');
   dz.style.display = 'flex';
-  dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">Word (.docx) or .txt · Max 10MB</div>`;
+  dz.innerHTML = `<div class="dz-icon">📄</div><div class="dz-text"><strong>Click to browse</strong> or drag & drop</div><div class="dz-sub">Word (.docx), PDF, or .txt · Max 10MB</div>`;
 }
 
 function updateCount(taId, countId) {
