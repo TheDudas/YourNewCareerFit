@@ -1340,6 +1340,10 @@ if(savedResult) {
 const upgraded = new URLSearchParams(window.location.search).get('upgraded');
 if(upgraded) activatePlan(upgraded);
 
+// Admin unlock
+const adminCode = new URLSearchParams(window.location.search).get('admin');
+if(adminCode === 'Free_Stuff') activatePlan('coach');
+
 document.getElementById('paywallOverlay').addEventListener('click',e=>{if(e.target.id==='paywallOverlay')closePaywall();});
 updateUsage();
 </script>
