@@ -523,7 +523,7 @@ textarea::placeholder{color:#b8bec9}
   <div class="tabs">
     <button class="tab active" id="tab-btn-analyze" onclick="switchTab('analyze',this)">📊 Analyze Fit</button>
     <button class="tab" id="tab-btn-cover" onclick="switchTab('cover',this)">✉️ Cover Letter <span id="cover-lock">🔒</span></button>
-    <button class="tab" id="tab-btn-interview" onclick="switchTab('interview',this)">🎤 Interview Prep <span id="interview-lock">🔒</span></button>
+    <button class="tab" id="tab-btn-interview" onclick="switchTab('interview',this);handleInterviewTab()">🎤 Interview Prep <span id="interview-lock">🔒</span></button>
     <button class="tab" id="tab-btn-salary" onclick="switchTab('salary',this)">💰 Salary Data <span id="salary-lock">🔒</span></button>
   </div>
 
@@ -1212,7 +1212,7 @@ document.getElementById('tab-btn-cover').addEventListener('click', ()=>{
   if(S.plan==='free'){showPaywall('cover');return;}
   if(S.result&&document.getElementById('cl-body').innerHTML===''){genCL();}
 });
-document.getElementById('tab-btn-interview').addEventListener('click', ()=>{
+function handleInterviewTab() {
   if(S.plan==='free'){showPaywall('interview');return;}
   if(!S.result){
     document.getElementById('iq-gate').style.display='block';
@@ -1222,7 +1222,7 @@ document.getElementById('tab-btn-interview').addEventListener('click', ()=>{
   document.getElementById('iq-gate').style.display='none';
   document.getElementById('iq-content').style.display='block';
   if(!S.interviewQs){genInterview(false);}
-});
+}
 document.getElementById('tab-btn-salary').addEventListener('click', ()=>{
   if(S.plan==='free'){showPaywall('salary');return;}
   if(S.result&&!S.salaryData){genSalary(false);}
