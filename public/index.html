@@ -949,6 +949,9 @@ async function analyze() {
   stepEl.textContent = loadingMsgs[0];
   const timer = setInterval(() => { mi=(mi+1)%loadingMsgs.length; stepEl.textContent=loadingMsgs[mi]; }, 1700);
 
+  const resumeTrunc = resume.length > 15000 ? resume.slice(0, 15000) + '\n[truncated]' : resume;
+  const jdTrunc = jd.length > 15000 ? jd.slice(0, 15000) + '\n[truncated]' : jd;
+
   try {
     const data = await callClaude([{
       role:'user',
@@ -961,10 +964,10 @@ CRITICAL RULES:
 - Strengths and gaps must be grounded in specific text from the resume and job description — quote or paraphrase actual content, never invent it.
 
 RESUME:
-${resume}
+${resumeTrunc}
 
 JOB DESCRIPTION:
-${jd}
+${jdTrunc}
 
 Return ONLY valid JSON (no markdown fences, no preamble):
 {
