@@ -750,8 +750,8 @@ textarea::placeholder{color:#b8bec9}
 <!-- PAYWALL -->
 <div class="paywall-overlay" id="paywallOverlay">
   <div class="paywall-modal">
-    <div class="paywall-icon">🚀</div>
-    <h2>Unlock Pro</h2>
+    <div class="paywall-icon" id="paywall-icon">🚀</div>
+    <h2 id="paywall-title">Unlock Pro</h2>
     <p id="paywall-msg">Get unlimited analyses plus interview prep, salary data, and AI cover letters.</p>
     <ul class="paywall-feats">
       <li><span class="pf-ok">✓</span> Unlimited analyses</li>
@@ -760,9 +760,12 @@ textarea::placeholder{color:#b8bec9}
       <li><span class="pf-ok">✓</span> AI cover letter generator</li>
       <li><span class="pf-ok">✓</span> Cancel anytime</li>
     </ul>
-    <div class="paywall-price-row"><div class="paywall-price">$9<span>/month</span></div></div>
+    <div class="paywall-price-row">
+      <div class="paywall-price">$9<span>/month</span></div>
+      <div style="font-size:13px;color:var(--ink-soft);margin-top:4px">Less than a cup of coffee</div>
+    </div>
     <div class="paywall-note">Billed monthly · No contracts · Cancel anytime</div>
-    <button class="btn-paywall" onclick="startCheckout('pro')">Start Pro — $9/mo</button>
+    <button class="btn-paywall" id="paywall-cta" onclick="startCheckout('pro')">Start Pro — $9/mo →</button>
     <button class="btn-skip" onclick="closePaywall()">Maybe later</button>
   </div>
 </div>
@@ -1282,16 +1285,19 @@ async function submitEmailCapture() {
 }
 
 // ── PAYWALL ───────────────────────────────────────
-const paywallMsgs = {
-  cover:     'Generate AI-written cover letters tailored to each role — a Pro feature.',
-  interview: 'Interview question prep based on your specific gaps is a Pro feature.',
-  salary:    'Salary range intelligence for this role and your market is a Pro feature.',
-  coaching:  'Full coaching recommendations are unlocked with Pro.',
-  upgrade:   'Get unlimited analyses, interview prep, salary data, and AI cover letters.',
-  limit:     "You've used all 3 free analyses this month. Upgrade for unlimited access."
+const paywallData = {
+  cover:     { icon:'✉️', title:'Generate Your Cover Letter', msg:'Get an AI-written cover letter tailored to this exact role and your resume — not a generic template.' },
+  interview: { icon:'🎤', title:'Prep for Your Interview', msg:'See the 5–8 questions a hiring manager is most likely to ask you, based on your actual gaps — with tips on how to answer each one.' },
+  salary:    { icon:'💰', title:'Know Your Number', msg:'Get the realistic salary range for this specific role, seniority level, and market — so you negotiate from data, not guesswork.' },
+  coaching:  { icon:'🎯', title:'Unlock Full Coaching', msg:'Get personalized coaching recommendations tailored to your resume and this exact role.' },
+  upgrade:   { icon:'🚀', title:'Unlock Pro', msg:'Get unlimited analyses, interview prep, salary data, and AI cover letters.' },
+  limit:     { icon:'⚡', title:"You've Used Your 3 Free Analyses", msg:"Upgrade to Pro for unlimited analyses plus interview prep, salary data, and AI cover letters — all for less than a cup of coffee." }
 };
 function showPaywall(key) {
-  document.getElementById('paywall-msg').textContent = paywallMsgs[key] || paywallMsgs.upgrade;
+  const d = paywallData[key] || paywallData.upgrade;
+  document.getElementById('paywall-icon').textContent = d.icon;
+  document.getElementById('paywall-title').textContent = d.title;
+  document.getElementById('paywall-msg').textContent = d.msg;
   document.getElementById('paywallOverlay').classList.add('visible');
 }
 function closePaywall() { document.getElementById('paywallOverlay').classList.remove('visible'); }
