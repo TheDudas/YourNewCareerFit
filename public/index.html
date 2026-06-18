@@ -997,6 +997,11 @@ Return ONLY valid JSON (no markdown fences, no preamble):
       throw new Error('Claude returned an unexpected response. Try shortening your resume or job description, or paste the text directly instead of uploading.');
     }
     S.result = result;
+    S.resumeText = resume;
+    S.jdText = jd;
+    localStorage.setItem('ncf_result', JSON.stringify(result));
+    localStorage.setItem('ncf_resume', resume);
+    localStorage.setItem('ncf_jd', jd);
     S.used++;
     updateUsage();
     renderResults(result);
@@ -1283,6 +1288,17 @@ function showToast(msg) {
 // Restore saved plan from localStorage
 const savedPlan = localStorage.getItem('ncf_plan');
 if(savedPlan && savedPlan !== 'free') activatePlan(savedPlan);
+
+// Restore last analysis result from localStorage
+const savedResult = localStorage.getItem('ncf_result');
+if(savedResult) {
+  try {
+    S.result = JSON.parse(savedResult);
+    S.resumeText = localStorage.getItem('ncf_resume') || '';
+    S.jdText = localStorage.getItem('ncf_jd') || '';
+    renderResults(S.result);
+  } catch(e) { localStorage.removeItem('ncf_result'); }
+}
 
 // Handle Stripe return
 const upgraded = new URLSearchParams(window.location.search).get('upgraded');
